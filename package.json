@@ -5,10 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "deploy:github": "ng deploy --base-href=https://vasuvanka.github.io/dev-tools",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
-  },
+    "deploy:github": "ng deploy --base-href=/dev-tools/",
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,

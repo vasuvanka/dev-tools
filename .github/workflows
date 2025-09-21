@@ -1,0 +1,29 @@
+name: Build & Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # The branch you push to trigger the workflow
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ⚙️
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+
+      - name: Install dependencies 📦
+        run: npm ci
+
+      - name: Deploy to GitHub Pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          branch: gh-pages # The branch the action should deploy to
+          folder: dist/dev-tools/browser # The folder containing your production build
+          # Replace 'your-project-name' with the name of your project from angular.json
