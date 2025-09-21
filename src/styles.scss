@@ -1,1 +1,313 @@
-/* You can add global styles to this file, and also import other style files */
+/* iPhone Glass Theme - Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-bg-light: rgba(255, 255, 255, 0.12);
+  --glass-bg-medium: rgba(255, 255, 255, 0.18);
+  --glass-bg-heavy: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-border-light: rgba(255, 255, 255, 0.25);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --glass-shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --glass-blur: blur(20px);
+  --glass-blur-light: blur(15px);
+  --glass-blur-heavy: blur(10px);
+  
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --text-light: rgba(26, 26, 26, 0.6);
+  
+  /* Modern accent colors - Pink theme */
+  --accent-purple: #ec4899;
+  --accent-pink: #f472b6;
+  --accent-blue: #60a5fa;
+  --accent-green: #34d399;
+  --accent-orange: #fb7185;
+  --accent-red: #f87171;
+  --accent-cyan: #22d3ee;
+  --accent-indigo: #a78bfa;
+  
+  --gradient-primary: linear-gradient(135deg, #ffffff 0%, #fce7f3 100%);
+  --gradient-secondary: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+  --gradient-success: linear-gradient(135deg, #ecfdf5 0%, #039b4d 100%);
+  --gradient-warning: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  --gradient-danger: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+  --gradient-info: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  --gradient-purple: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+  --gradient-sunset: linear-gradient(135deg, #fff1f2 0%, #fce7f3 100%);
+  --gradient-ocean: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  --gradient-forest: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  --gradient-fire: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+  --gradient-ice: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background: var(--gradient-primary);
+  min-height: 100vh;
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* Glass morphism utility classes */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-light {
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--glass-blur-light);
+  -webkit-backdrop-filter: var(--glass-blur-light);
+  border: 1px solid var(--glass-border-light);
+  box-shadow: var(--glass-shadow-light);
+}
+
+.glass-medium {
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 1px solid var(--glass-border-light);
+  box-shadow: var(--glass-shadow-light);
+}
+
+.glass-heavy {
+  background: var(--glass-bg-heavy);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 1px solid var(--glass-border-light);
+  box-shadow: var(--glass-shadow-light);
+}
+
+/* Glass input styles */
+.glass-input {
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 2px solid var(--glass-border-light);
+  border-radius: 8px;
+  color: var(--text-primary);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.glass-input:focus {
+  border-color: var(--accent-pink);
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+}
+
+.glass-input::placeholder {
+  color: var(--text-light);
+}
+
+/* Glass button styles */
+.glass-button {
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 1px solid var(--glass-border-light);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.glass-button:hover {
+  background: var(--glass-bg-heavy);
+  transform: translateY(-2px);
+  box-shadow: var(--glass-shadow-light);
+}
+
+.glass-button:active {
+  transform: translateY(0);
+}
+
+.glass-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Glass card styles */
+.glass-card {
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--glass-blur-light);
+  -webkit-backdrop-filter: var(--glass-blur-light);
+  border: 1px solid var(--glass-border-light);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+  padding: 2rem;
+}
+
+/* Glass section styles */
+.glass-section {
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--glass-blur-light);
+  -webkit-backdrop-filter: var(--glass-blur-light);
+  border: 1px solid var(--glass-border-light);
+  border-radius: 12px;
+  box-shadow: var(--glass-shadow-light);
+  padding: 1.5rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .glass-card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  
+  .glass-section {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Animation utilities */
+@keyframes glassShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.glass-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background-size: 200% 100%;
+  animation: glassShimmer 2s infinite;
+}
+
+/* Focus styles for accessibility */
+.glass-input:focus,
+.glass-button:focus {
+  outline: 2px solid var(--accent-pink);
+  outline-offset: 2px;
+}
+
+/* Selection styles */
+::selection {
+  background: rgba(236, 72, 153, 0.3);
+  color: var(--text-primary);
+}
+
+/* Modern gradient utility classes */
+.gradient-purple {
+  background: var(--gradient-purple);
+}
+
+.gradient-sunset {
+  background: var(--gradient-sunset);
+}
+
+.gradient-ocean {
+  background: var(--gradient-ocean);
+}
+
+.gradient-forest {
+  background: var(--gradient-forest);
+}
+
+.gradient-fire {
+  background: var(--gradient-fire);
+}
+
+.gradient-ice {
+  background: var(--gradient-ice);
+}
+
+/* Modern accent color utilities */
+.text-purple {
+  color: var(--accent-purple);
+}
+
+.text-pink {
+  color: var(--accent-pink);
+}
+
+.text-blue {
+  color: var(--accent-blue);
+}
+
+.text-green {
+  color: var(--accent-green);
+}
+
+.text-orange {
+  color: var(--accent-orange);
+}
+
+.text-red {
+  color: var(--accent-red);
+}
+
+.text-cyan {
+  color: var(--accent-cyan);
+}
+
+.text-indigo {
+  color: var(--accent-indigo);
+}
+
+/* Modern glass button variants - Pink theme */
+.glass-button-purple {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(236, 72, 153, 0.1));
+  border-color: rgba(236, 72, 153, 0.3);
+  color: var(--accent-purple);
+}
+
+.glass-button-pink {
+  background: linear-gradient(135deg, rgba(244, 114, 182, 0.2), rgba(244, 114, 182, 0.1));
+  border-color: rgba(244, 114, 182, 0.3);
+  color: var(--accent-pink);
+}
+
+.glass-button-blue {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(96, 165, 250, 0.1));
+  border-color: rgba(96, 165, 250, 0.3);
+  color: var(--accent-blue);
+}
+
+.glass-button-green {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(52, 211, 153, 0.1));
+  border-color: rgba(52, 211, 153, 0.3);
+  color: var(--accent-green);
+}
+
+.glass-button-orange {
+  background: linear-gradient(135deg, rgba(251, 113, 133, 0.2), rgba(251, 113, 133, 0.1));
+  border-color: rgba(251, 113, 133, 0.3);
+  color: var(--accent-orange);
+}

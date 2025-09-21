@@ -1,59 +1,72 @@
-# Utilities
+# Vasu Vanka Dev Tools
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.2.
+![Dev Tools Banner](https://via.placeholder.com/800x200.png?text=Vasu+Vanka+Dev+Tools)
 
-## Development server
+A curated collection of free online utilities to streamline your daily development workflow. This project provides a simple, fast, and modern interface for essential tasks, including JSON formatting, Base64 encoding, IP address lookup, and more.
 
-To start a local development server, run:
+## Features
 
-```bash
-ng serve
-```
+This web application bundles multiple convenient tools under one roof:
+*   **Progressive Todo List**: A simple and persistent todo list to manage your daily tasks.
+*   **IP Address Tool**: Quickly look up and display your public IP address.
+*   **JSON Formatter & Viewer**: Format and beautify JSON data, making it easy to read and debug.
+*   **Base64 Tools**: Encode and decode text to and from Base64 format.
+*   **QR Code Generator**: Generate QR codes from any text input.
+*   **Color Picker**: Select and generate color codes in various formats (HEX, RGB, HSL).
+*   **Text Tools**: A suite of text manipulation utilities for various needs.
+*   **Timer**: A simple and clean timer for tracking time.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Technologies Used
 
-## Code scaffolding
+This project is built as a modern Single-Page Application (SPA) using the following technologies:
+*   **Angular**: A robust framework for building scalable web applications.
+*   **HTML5**: The markup language used for structuring the web page, with semantic tags for improved accessibility and SEO.
+*   **Meta Tags**: Optimized `<meta>` tags for search engines, social media sharing (Open Graph, Twitter Card), and mobile responsiveness.
+*   **SEO Best Practices**: Implementation of canonical URLs, clear titles, and descriptive meta tags to ensure discoverability.
+*   **Schema Markup**: JSON-LD structured data is used to provide rich, contextual information to search engines.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Installation and Setup
 
-```bash
-ng generate component component-name
-```
+To run this project locally, follow these steps:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+1.  **Clone the repository:**
+    ```sh
+    git clone https://github.com/vasuvanka/dev-tools.git
+    cd dev-tools
+    ```
 
-```bash
-ng generate --help
-```
+2.  **Install dependencies:**
+    This project is based on an Angular app. If you don't have the Angular CLI installed, run:
+    ```sh
+    npm install -g @angular/cli
+    ```
+    Then, install the project dependencies:
+    ```sh
+    npm install
+    ```
 
-## Building
+3.  **Run the development server:**
+    ```sh
+    ng serve
+    ```
+    Open your browser and navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-To build the project run:
+## SEO Enhancements
 
-```bash
-ng build
-```
+This project's `index.html` has been optimized for better search engine visibility. Key SEO features include:
+*   **Descriptive Title**: The `<title>` tag clearly communicates the page's purpose.
+*   **Rich Meta Description**: The `<meta name="description">` provides an engaging summary for search results.
+*   **Social Media Previews**: Open Graph and Twitter Card tags ensure links look great when shared on social platforms.
+*   **Canonical URL**: A `<link rel="canonical">` prevents duplicate content issues.
+*   **Structured Data**: JSON-LD Schema provides additional context to search engines, potentially enabling rich snippets.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Contribution
 
-## Running unit tests
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/vasuvanka/dev-tools/issues).
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## License
 
-```bash
-ng test
-```
+This project is licensed under the [MIT License](LICENSE).
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+**Disclaimer**: This project is maintained by **Vasu Vanka**. All tools are provided for free and as-is.
