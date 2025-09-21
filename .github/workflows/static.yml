@@ -39,7 +39,7 @@ jobs:
 
       - name: Build Angular app
         # Replace 'dev-tools' with your actual project name from angular.json
-        run: npm run build -- --base-href=/dev-tools/
+        run: npm run build -- --base-href=/dev-tools/ --output-path=dist/dev-tools/browser
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
