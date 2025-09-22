@@ -3,7 +3,6 @@ name: Deploy Angular to Pages
 on:
   push:
     branches: ["main"]
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -24,19 +23,19 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build Angular app
-        run: npm run build -- --base-href=/dev-tools/ --output-path=dist/dev-tools/browser
+        run: npm run build -- --base-href=/dev-tools/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/dev-tools/browser
+          path: './dist/dev-tools/browser'
 
   deploy:
     environment:
