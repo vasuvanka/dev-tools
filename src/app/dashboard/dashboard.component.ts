@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { quotes } from '../quotes';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,6 +9,10 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule],
   template: `
     <div class="dashboard">
+               
+      <div class="section-header glass-section"> 
+          {{getQuote()}}
+      </div>
         <!-- Tools Section -->
         <div class="content-section" *ngIf="activeSection() === 'tools'">
           <div class="tools-grid">
@@ -64,131 +69,6 @@ import { RouterModule } from '@angular/router';
               <h3>Text Tools</h3>
               <p>Text manipulation & analysis</p>
             </div>
-          </div>
-        </div>
-        
-        <!-- News Section -->
-        <div class="content-section" *ngIf="activeSection() === 'news'">
-          <div class="section-header glass-section">
-            <h1>📰 Latest Developer News</h1>
-            <p>Stay updated with the latest in tech, crypto, and software releases</p>
-          </div>
-          
-          <div class="news-grid">
-            <div class="news-card glass-medium">
-              <div class="news-card-header">
-                <h3>🚀 Tech News</h3>
-                <span class="news-source">Hacker News</span>
-              </div>
-              <div class="news-iframe-container">
-                <iframe 
-                  src="https://hn.algolia.com/?dateRange=pastWeek&page=0&prefix=false&query=&sort=byPopularity&type=story"
-                  class="news-iframe"
-                  title="Hacker News"
-                  loading="lazy">
-                </iframe>
-              </div>
-            </div>
-            
-            <div class="news-card glass-medium">
-              <div class="news-card-header">
-                <h3>💰 Crypto News</h3>
-                <span class="news-source">CryptoPanic</span>
-              </div>
-              <div class="news-iframe-container">
-                <iframe 
-                  src="https://cryptopanic.com/news/"
-                  class="news-iframe"
-                  title="CryptoPanic Crypto News"
-                  loading="lazy">
-                </iframe>
-              </div>
-            </div>
-            
-            <div class="news-card glass-medium">
-              <div class="news-card-header">
-                <h3>🔧 Software Releases</h3>
-                <span class="news-source">Dev.to</span>
-              </div>
-              <div class="news-iframe-container">
-                <iframe 
-                  src="https://dev.to/"
-                  class="news-iframe"
-                  title="Dev.to Developer Community"
-                  loading="lazy">
-                </iframe>
-              </div>
-            </div>
-            
-            <div class="news-card glass-medium">
-              <div class="news-card-header">
-                <h3>📱 Tech News</h3>
-                <span class="news-source">TechCrunch</span>
-              </div>
-              <div class="news-iframe-container">
-                <iframe 
-                  src="https://techcrunch.com/"
-                  class="news-iframe"
-                  title="TechCrunch Tech News"
-                  loading="lazy">
-                </iframe>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-actions glass-section">
-            <button class="refresh-news glass-button glass-button-pink" (click)="refreshNews()">
-              🔄 Refresh News
-            </button>
-            <button class="open-all-news glass-button glass-button-blue" (click)="openAllNews()">
-              🌐 Open All Sources
-            </button>
-          </div>
-        </div>
-        
-        <!-- Resources Section -->
-        <div class="content-section" *ngIf="activeSection() === 'resources'">
-          <div class="section-header glass-section">
-            <h1>📚 Developer Resources</h1>
-            <p>Quick access to popular developer resources and communities</p>
-          </div>
-          
-          <div class="resources-grid">
-            <a href="https://github.com/trending" target="_blank" rel="noopener noreferrer" class="resource-card glass-medium">
-              <div class="resource-icon">📈</div>
-              <h3>GitHub Trending</h3>
-              <p>Discover trending repositories</p>
-            </a>
-            
-            <a href="https://www.producthunt.com/" target="_blank" rel="noopener noreferrer" class="resource-card glass-medium">
-              <div class="resource-icon">🚀</div>
-              <h3>Product Hunt</h3>
-              <p>New products and startups</p>
-            </a>
-            
-            <a href="https://www.reddit.com/r/programming/" target="_blank" rel="noopener noreferrer" class="resource-card glass-medium">
-              <div class="resource-icon">💬</div>
-              <h3>Reddit Programming</h3>
-              <p>Programming discussions</p>
-            </a>
-            
-            <a href="https://stackoverflow.com/questions/tagged/javascript" target="_blank" rel="noopener noreferrer" class="resource-card glass-medium">
-              <div class="resource-icon">❓</div>
-              <h3>Stack Overflow</h3>
-              <p>Programming Q&A</p>
-            </a>
-            
-            <a href="https://dev.to/" target="_blank" rel="noopener noreferrer" class="resource-card glass-medium">
-              <div class="resource-icon">👨‍💻</div>
-              <h3>Dev.to</h3>
-              <p>Developer community</p>
-            </a>
-            
-            <a href="https://www.freecodecamp.org/" target="_blank" rel="noopener noreferrer" class="resource-card glass-medium">
-              <div class="resource-icon">🎓</div>
-              <h3>FreeCodeCamp</h3>
-              <p>Learn to code for free</p>
-            </a>
           </div>
         </div>
     </div>
@@ -430,9 +310,14 @@ import { RouterModule } from '@angular/router';
 })
 export class DashboardComponent {
   activeSection = signal<'tools' | 'news' | 'resources'>('tools');
-  
+
   setActiveSection(section: 'tools' | 'news' | 'resources') {
     this.activeSection.set(section);
+  }
+
+  getQuote(){
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    return quotes[randomIndex];
   }
   
   refreshNews() {
