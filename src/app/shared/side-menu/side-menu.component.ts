@@ -69,6 +69,26 @@ import { filter } from 'rxjs/operators';
             <span class="quick-tool-icon">🆔</span>
             <span class="quick-tool-text">UUID</span>
           </a>
+          <a routerLink="/timestamp-converter" class="quick-tool" routerLinkActive="active">
+            <span class="quick-tool-icon">🕒</span>
+            <span class="quick-tool-text">Time</span>
+          </a>
+          <a routerLink="/url-encoder" class="quick-tool" routerLinkActive="active">
+            <span class="quick-tool-icon">⛓️</span>
+            <span class="quick-tool-text">Encode</span>
+          </a>
+          <a routerLink="/css-generator" class="quick-tool" routerLinkActive="active">
+            <span class="quick-tool-icon">🎨</span>
+            <span class="quick-tool-text">CSS</span>
+          </a>
+          <a routerLink="/dummy-data" class="quick-tool" routerLinkActive="active">
+            <span class="quick-tool-icon">📝</span>
+            <span class="quick-tool-text">Dummy</span>
+          </a>
+          <a routerLink="/markdown-previewer" class="quick-tool" routerLinkActive="active">
+            <span class="quick-tool-icon">👀</span>
+            <span class="quick-tool-text">MD</span>
+          </a>
           <a routerLink="/photo-editor" class="quick-tool" routerLinkActive="active">
             <span class="quick-tool-icon">🖼️</span>
             <span class="quick-tool-text">Photo</span>

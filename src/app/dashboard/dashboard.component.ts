@@ -140,6 +140,56 @@ import { quotes } from '../quotes';
             <p>Secure random generators</p>
             <div class="card-border"></div>
           </div>
+
+          <div class="tool-card group" routerLink="/timestamp-converter">
+            <div class="tool-glow glow-orange"></div>
+            <div class="tool-icon-wrapper">
+              <span class="tool-icon">🕒</span>
+            </div>
+            <h3>Timestamp Converter</h3>
+            <p>Epoch to local dates</p>
+            <div class="card-border"></div>
+          </div>
+
+          <div class="tool-card group" routerLink="/url-encoder">
+            <div class="tool-glow glow-blue"></div>
+            <div class="tool-icon-wrapper">
+              <span class="tool-icon">⛓️</span>
+            </div>
+            <h3>URL Encoder</h3>
+            <p>Encode URL strings</p>
+            <div class="card-border"></div>
+          </div>
+
+          <div class="tool-card group" routerLink="/css-generator">
+            <div class="tool-glow glow-pink"></div>
+            <div class="tool-icon-wrapper">
+              <span class="tool-icon">🎨</span>
+            </div>
+            <h3>CSS Generator</h3>
+            <p>Box shadows & more</p>
+            <div class="card-border"></div>
+          </div>
+
+          <div class="tool-card group" routerLink="/dummy-data">
+            <div class="tool-glow glow-cyan"></div>
+            <div class="tool-icon-wrapper">
+              <span class="tool-icon">📝</span>
+            </div>
+            <h3>Dummy Data</h3>
+            <p>Lorem ipsum & mock JSON</p>
+            <div class="card-border"></div>
+          </div>
+
+          <div class="tool-card group" routerLink="/markdown-previewer">
+            <div class="tool-glow glow-orange"></div>
+            <div class="tool-icon-wrapper">
+              <span class="tool-icon">👀</span>
+            </div>
+            <h3>Markdown Previewer</h3>
+            <p>Live MD editing</p>
+            <div class="card-border"></div>
+          </div>
           
           <div class="tool-card group" routerLink="/photo-editor">
             <div class="tool-glow glow-blue"></div>
