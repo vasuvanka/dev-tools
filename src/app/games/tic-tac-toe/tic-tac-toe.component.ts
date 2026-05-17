@@ -132,8 +132,8 @@ type Player = 'X' | 'O' | null;
     }
     
     @media (max-width: 500px) {
-      .tic-tac-toe-board { grid-template-columns: repeat(3, 90px); gap: 10px; }
-      .cell { height: 90px !important; font-size: 3.5rem !important; }
+      .tic-tac-toe-board { grid-template-columns: repeat(3, 85px); gap: 10px; margin-bottom: 1.5rem; }
+      .cell { height: 85px !important; font-size: 3rem !important; }
     }
     
     .cell {
@@ -166,6 +166,51 @@ type Player = 'X' | 'O' | null;
     .btn-primary:hover { opacity: 0.9; transform: scale(1.05); }
     .btn-secondary { background: var(--glass-bg-heavy); color: var(--text-primary); border: 1px solid var(--glass-border-light); }
     .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+
+    /* Media query to scale whole board down vertically for standard mobile heights */
+    @media (max-width: 768px) {
+      .fullscreen-container {
+        padding: 1rem;
+        justify-content: flex-start;
+        overflow-y: auto;
+      }
+      .game-layout {
+        gap: 0.75rem;
+      }
+      .header-section {
+        padding: 1rem;
+      }
+      .header-section h2 {
+        font-size: 1.8rem;
+      }
+      .header-section p {
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+      }
+      .scoreboard {
+        gap: 1.5rem;
+        padding: 0.75rem 1.5rem;
+      }
+      .label {
+        font-size: 0.8rem;
+        margin-bottom: 0.25rem;
+      }
+      .score {
+        font-size: 2rem;
+      }
+      .board-container {
+        padding: 1.25rem;
+      }
+      .status-banner {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        min-height: 2rem;
+      }
+      .btn-primary, .btn-secondary {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+      }
+    }
   `]
 })
 export class TicTacToeComponent {

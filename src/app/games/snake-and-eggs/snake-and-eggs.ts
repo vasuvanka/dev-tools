@@ -10,7 +10,9 @@ interface Point { x: number; y: number; }
   imports: [CommonModule],
   template: `
     <div class="fullscreen-container" [class.flash-red]="showFlash()">
-      <canvas #gameCanvas width="400" height="400"></canvas>
+      <canvas #gameCanvas width="400" height="400"
+              (touchstart)="onTouchStart($event)"
+              (touchend)="onTouchEnd($event)"></canvas>
 
       <div class="hud" *ngIf="isPlaying()">
         <div class="hud-stats">
@@ -18,10 +20,22 @@ interface Point { x: number; y: number; }
         </div>
         <button class="btn-exit" (click)="exitGame()">Exit Game</button>
       </div>
+
+      <!-- Mobile D-pad -->
+      <div class="mobile-controls" *ngIf="isMobile() && isPlaying()">
+        <button class="ctrl-btn up" (touchstart)="setDirection(0, -1); $event.preventDefault();">▲</button>
+        <div class="ctrl-row">
+          <button class="ctrl-btn left" (touchstart)="setDirection(-1, 0); $event.preventDefault();">◀</button>
+          <button class="ctrl-btn right" (touchstart)="setDirection(1, 0); $event.preventDefault();">▶</button>
+        </div>
+        <button class="ctrl-btn down" (touchstart)="setDirection(0, 1); $event.preventDefault();">▼</button>
+      </div>
       
       <div class="menu-overlay" *ngIf="!isPlaying()">
         <h2>🐍🥚 Snake n Eggs</h2>
-        <p *ngIf="!gameOver()">Eat the eggs to grow! Use Arrow Keys or WASD to move.</p>
+        <p *ngIf="!gameOver()">
+          Eat the eggs to grow! {{ isMobile() ? 'Swipe or tap D-pad to move.' : 'Use Arrow Keys or WASD to move.' }}
+        </p>
         
         <div *ngIf="gameOver()" class="game-over-text">Game Over!</div>
         
@@ -38,8 +52,9 @@ interface Point { x: number; y: number; }
     .fullscreen-container {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: #0f172a; z-index: 9999; overflow: hidden;
-      display: flex; justify-content: center; align-items: center;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
       transition: background-color 0.1s;
+      gap: 1rem;
     }
     
     .flash-red { animation: flashRed 0.5s ease-out; }
@@ -48,7 +63,8 @@ interface Point { x: number; y: number; }
     canvas {
       background-color: rgba(20, 20, 30, 0.5);
       box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: block;
-      max-width: 100vw; max-height: 100vh; object-fit: contain;
+      max-width: 95vw; max-height: 50vh; object-fit: contain;
+      border-radius: 12px;
     }
     
     .hud {
@@ -72,16 +88,17 @@ interface Point { x: number; y: number; }
     
     .menu-overlay {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: rgba(15, 23, 42, 0.9); padding: 3rem; border-radius: 16px;
+      background: rgba(15, 23, 42, 0.9); padding: 2.5rem; border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.1); text-align: center;
       display: flex; flex-direction: column; gap: 1.5rem; align-items: center;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); z-index: 10000;
+      width: 90%; max-width: 400px;
     }
     
-    .menu-overlay h2 { font-size: 3rem; margin: 0; color: white; }
-    .menu-overlay p { font-size: 1.2rem; color: #94a3b8; margin: 0; }
+    .menu-overlay h2 { font-size: 2.5rem; margin: 0; color: white; }
+    .menu-overlay p { font-size: 1.1rem; color: #94a3b8; margin: 0; }
     
-    .game-over-text { color: #ff4b4b; font-weight: bold; font-size: 3rem; text-transform: uppercase; text-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+    .game-over-text { color: #ff4b4b; font-weight: bold; font-size: 2.5rem; text-transform: uppercase; text-shadow: 0 4px 8px rgba(0,0,0,0.5); }
     
     .menu-buttons { display: flex; gap: 1rem; margin-top: 1rem; }
     .btn-primary {
@@ -90,13 +107,41 @@ interface Point { x: number; y: number; }
       transition: transform 0.2s, opacity 0.2s;
     }
     .btn-primary:hover { opacity: 0.9; transform: scale(1.05); }
-
+ 
     .btn-secondary {
       padding: 0.75rem 1.5rem; font-size: 1.1rem; border-radius: 8px; font-weight: 600;
       cursor: pointer; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white;
       transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem;
     }
     .btn-secondary:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+    /* Mobile D-pad Styles */
+    .mobile-controls {
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      margin-top: 0.5rem; z-index: 10000;
+    }
+    .ctrl-row {
+      display: flex; gap: 2.5rem;
+    }
+    .ctrl-btn {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: white; font-size: 1.5rem; font-weight: bold;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 15px rgba(236, 72, 153, 0.1);
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: all 0.1s ease;
+    }
+    .ctrl-btn:active {
+      transform: scale(0.9);
+      background: rgba(236, 72, 153, 0.2);
+      border-color: #ec4899;
+      box-shadow: 0 0 25px rgba(236, 72, 153, 0.4);
+    }
   `]
 })
 export class SnakeAndEggsComponent implements AfterViewInit, OnDestroy {
@@ -107,6 +152,7 @@ export class SnakeAndEggsComponent implements AfterViewInit, OnDestroy {
   isPlaying = signal(false);
   gameOver = signal(false);
   showFlash = signal(false);
+  isMobile = signal(false);
   
   private ctx!: CanvasRenderingContext2D;
   private gridSize = 20;
@@ -119,6 +165,21 @@ export class SnakeAndEggsComponent implements AfterViewInit, OnDestroy {
   
   private gameLoopId: any;
   private baseSpeed = 150; // ms
+
+  // Touch Swipe Gesture State
+  private touchStartX = 0;
+  private touchStartY = 0;
+
+  constructor() {
+    this.checkDevice();
+  }
+
+  @HostListener('window:resize')
+  checkDevice() {
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const isSmallScreen = window.innerWidth <= 768;
+    this.isMobile.set(isTouch || isSmallScreen);
+  }
 
   ngAfterViewInit() {
     this.ctx = this.canvasRef.nativeElement.getContext('2d')!;
@@ -134,6 +195,46 @@ export class SnakeAndEggsComponent implements AfterViewInit, OnDestroy {
     this.router.navigate(['/games']);
   }
 
+  // Handle Swipes
+  onTouchStart(event: TouchEvent) {
+    if (!this.isPlaying()) return;
+    this.touchStartX = event.touches[0].clientX;
+    this.touchStartY = event.touches[0].clientY;
+  }
+
+  onTouchEnd(event: TouchEvent) {
+    if (!this.isPlaying()) return;
+    const diffX = event.changedTouches[0].clientX - this.touchStartX;
+    const diffY = event.changedTouches[0].clientY - this.touchStartY;
+    
+    // Swipe threshold of 30 pixels
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      if (Math.abs(diffX) > 30) {
+        if (diffX > 0) {
+          this.setDirection(1, 0); // Right
+        } else {
+          this.setDirection(-1, 0); // Left
+        }
+      }
+    } else {
+      if (Math.abs(diffY) > 30) {
+        if (diffY > 0) {
+          this.setDirection(0, 1); // Down
+        } else {
+          this.setDirection(0, -1); // Up
+        }
+      }
+    }
+  }
+
+  setDirection(x: number, y: number) {
+    if (!this.isPlaying()) return;
+    // Prevent immediate 180-degree turns
+    if (x !== 0 && this.velocity.x === -x) return;
+    if (y !== 0 && this.velocity.y === -y) return;
+    this.nextVelocity = { x, y };
+  }
+
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
     if (!this.isPlaying()) return;
@@ -141,22 +242,22 @@ export class SnakeAndEggsComponent implements AfterViewInit, OnDestroy {
     switch (event.key) {
       case 'ArrowUp':
       case 'w':
-        if (this.velocity.y !== 1) this.nextVelocity = { x: 0, y: -1 };
+        this.setDirection(0, -1);
         event.preventDefault();
         break;
       case 'ArrowDown':
       case 's':
-        if (this.velocity.y !== -1) this.nextVelocity = { x: 0, y: 1 };
+        this.setDirection(0, 1);
         event.preventDefault();
         break;
       case 'ArrowLeft':
       case 'a':
-        if (this.velocity.x !== 1) this.nextVelocity = { x: -1, y: 0 };
+        this.setDirection(-1, 0);
         event.preventDefault();
         break;
       case 'ArrowRight':
       case 'd':
-        if (this.velocity.x !== -1) this.nextVelocity = { x: 1, y: 0 };
+        this.setDirection(1, 0);
         event.preventDefault();
         break;
     }

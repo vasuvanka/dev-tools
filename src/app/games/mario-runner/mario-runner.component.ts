@@ -26,9 +26,10 @@ const GROUND_Y = 320;
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="fullscreen-container">
-      <canvas #gameCanvas [width]="WIDTH" [height]="HEIGHT"
-        (touchstart)="onTouchStart($event)"></canvas>
+    <div class="fullscreen-container"
+         (touchstart)="onTouchStart($event)"
+         (touchend)="onTouchEnd($event)">
+      <canvas #gameCanvas [width]="WIDTH" [height]="HEIGHT"></canvas>
 
       <div class="hud" *ngIf="isPlaying()">
         <div class="hud-stats">
@@ -37,10 +38,17 @@ const GROUND_Y = 320;
         </div>
         <button class="btn-exit" (click)="exitGame()">Exit Game</button>
       </div>
+
+      <!-- Mobile Tip Overlay -->
+      <div class="mobile-tip" *ngIf="isMobile() && isPlaying()">
+        Tap anywhere to jump!
+      </div>
       
       <div class="menu-overlay" *ngIf="!isPlaying()">
         <h2>🏃‍♂️ Mario Runner</h2>
-        <p *ngIf="!gameOver()">Press Space or Up Arrow to jump. Stomp Goombas, collect coins!</p>
+        <p *ngIf="!gameOver()">
+          {{ isMobile() ? 'Tap anywhere on the screen to jump! Stomp Goombas!' : 'Press Space or Up Arrow to jump. Stomp Goombas, collect coins!' }}
+        </p>
         
         <div *ngIf="gameOver()" class="game-over-text">GAME OVER</div>
         <div *ngIf="gameOver()" class="final-score">Final Score: {{ score() }}</div>
@@ -58,13 +66,15 @@ const GROUND_Y = 320;
     .fullscreen-container {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: #0f172a; z-index: 9999; overflow: hidden;
-      display: flex; justify-content: center; align-items: center;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      gap: 1rem;
     }
     
     canvas {
       background: #5c94fc;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: block;
-      max-width: 100vw; max-height: 100vh; object-fit: contain;
+      max-width: 95vw; max-height: 50vh; object-fit: contain;
+      border-radius: 12px;
     }
     
     .hud {
@@ -89,16 +99,17 @@ const GROUND_Y = 320;
     
     .menu-overlay {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: rgba(15, 23, 42, 0.9); padding: 3rem; border-radius: 16px;
+      background: rgba(15, 23, 42, 0.9); padding: 2.5rem; border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.1); text-align: center;
       display: flex; flex-direction: column; gap: 1.5rem; align-items: center;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); z-index: 10000;
+      width: 90%; max-width: 450px;
     }
     
-    .menu-overlay h2 { font-size: 3rem; margin: 0; color: white; }
-    .menu-overlay p { font-size: 1.2rem; color: #94a3b8; margin: 0; }
+    .menu-overlay h2 { font-size: 2.5rem; margin: 0; color: white; }
+    .menu-overlay p { font-size: 1.1rem; color: #94a3b8; margin: 0; }
     
-    .game-over-text { color: #ef4444; font-weight: bold; font-size: 3rem; text-shadow: 0 4px 8px rgba(0,0,0,0.8); letter-spacing: 4px; }
+    .game-over-text { color: #ef4444; font-weight: bold; font-size: 2.5rem; text-shadow: 0 4px 8px rgba(0,0,0,0.8); letter-spacing: 4px; }
     .final-score { color: #fbbf24; font-size: 1.5rem; font-weight: bold; }
     
     .menu-buttons { display: flex; gap: 1rem; margin-top: 1rem; }
@@ -108,13 +119,32 @@ const GROUND_Y = 320;
       transition: transform 0.2s, opacity 0.2s;
     }
     .btn-primary:hover { opacity: 0.9; transform: scale(1.05); }
-
+ 
     .btn-secondary {
       padding: 0.75rem 1.5rem; font-size: 1.1rem; border-radius: 8px; font-weight: 600;
       cursor: pointer; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white;
       transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem;
     }
     .btn-secondary:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+    /* Mobile Tip Overlay */
+    .mobile-tip {
+      position: absolute; bottom: 2rem;
+      background: rgba(229, 37, 33, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(229, 37, 33, 0.15);
+      padding: 0.75rem 1.5rem; border-radius: 20px;
+      color: #ff9e9b; font-weight: bold; font-size: 1rem;
+      box-shadow: 0 0 15px rgba(229, 37, 33, 0.15);
+      pointer-events: none;
+      animation: pulse 2s infinite;
+      z-index: 10000;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.8; }
+    }
   `]
 })
 export class MarioRunnerComponent implements AfterViewInit, OnDestroy {
@@ -128,6 +158,7 @@ export class MarioRunnerComponent implements AfterViewInit, OnDestroy {
   coins = signal(0);
   isPlaying = signal(false);
   gameOver = signal(false);
+  isMobile = signal(false);
   
   private ctx!: CanvasRenderingContext2D;
   private gameLoopId: any;
@@ -142,6 +173,18 @@ export class MarioRunnerComponent implements AfterViewInit, OnDestroy {
   
   private isJumping = false;
   private jumpHoldTimer = 0;
+  private isTouchHolding = false;
+
+  constructor() {
+    this.checkDevice();
+  }
+
+  @HostListener('window:resize')
+  checkDevice() {
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const isSmallScreen = window.innerWidth <= 768;
+    this.isMobile.set(isTouch || isSmallScreen);
+  }
 
   ngAfterViewInit() {
     this.ctx = this.canvasRef.nativeElement.getContext('2d')!;
@@ -182,11 +225,18 @@ export class MarioRunnerComponent implements AfterViewInit, OnDestroy {
   onTouchStart(e: TouchEvent) {
     if (!this.isPlaying()) return;
     e.preventDefault();
+    this.isTouchHolding = true;
     if (!this.isJumping) {
       this.player.vy = JUMP_FORCE;
       this.isJumping = true;
-      this.jumpHoldTimer = 5; 
+      this.jumpHoldTimer = 10; // Allow full 10-frame high jump hold
     }
+  }
+
+  onTouchEnd(e: TouchEvent) {
+    if (!this.isPlaying()) return;
+    this.isTouchHolding = false;
+    this.jumpHoldTimer = 0; // Cut jump short
   }
 
   startGame() {
@@ -238,6 +288,10 @@ export class MarioRunnerComponent implements AfterViewInit, OnDestroy {
     this.scrollSpeed = 5 + (this.distance / 3000);
     
     // Player Physics
+    if (this.isTouchHolding && this.jumpHoldTimer > 0) {
+      this.player.vy -= 1.2; // Extra touch boost while holding
+    }
+    
     this.player.vy += GRAVITY;
     this.player.y += this.player.vy;
     

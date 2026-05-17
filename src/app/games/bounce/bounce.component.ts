@@ -39,10 +39,29 @@ interface Player {
         </div>
         <button class="btn-exit" (click)="exitGame()">Exit Game</button>
       </div>
+
+      <!-- Mobile controls -->
+      <div class="mobile-controls" *ngIf="isMobile() && isPlaying()">
+        <div class="left-controls">
+          <button class="ctrl-btn left" 
+                  (touchstart)="keys.left = true; $event.preventDefault();"
+                  (touchend)="keys.left = false; $event.preventDefault();">◀</button>
+          <button class="ctrl-btn right" 
+                  (touchstart)="keys.right = true; $event.preventDefault();"
+                  (touchend)="keys.right = false; $event.preventDefault();">▶</button>
+        </div>
+        <div class="right-controls">
+          <button class="ctrl-btn jump" 
+                  (touchstart)="keys.up = true; $event.preventDefault();"
+                  (touchend)="keys.up = false; $event.preventDefault();">JUMP</button>
+        </div>
+      </div>
       
       <div class="menu-overlay" *ngIf="!isPlaying()">
         <h2>🔴 Bounce</h2>
-        <p *ngIf="!gameWon() && !gameOver()">Collect all rings to unlock the exit!</p>
+        <p *ngIf="!gameWon() && !gameOver()">
+          Collect all rings to unlock the exit! {{ isMobile() ? 'Use on-screen controls to roll.' : 'Use Arrow Keys or WASD to move.' }}
+        </p>
         
         <div *ngIf="gameWon()" class="game-won-text">You Beat All 25 Levels! 🏆</div>
         <div *ngIf="gameOver()" class="game-over-text">Game Over!</div>
@@ -60,7 +79,7 @@ interface Player {
     .fullscreen-container {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: #0f172a; z-index: 9999; overflow: hidden;
-      display: flex; justify-content: center; align-items: center;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
       transition: background-color 0.1s;
     }
     
@@ -70,7 +89,8 @@ interface Player {
     canvas {
       background: linear-gradient(180deg, #1e1b4b 0%, #312e81 100%);
       box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: block;
-      max-width: 100vw; max-height: 100vh; object-fit: contain;
+      max-width: 95vw; max-height: 50vh; object-fit: contain;
+      border-radius: 12px;
     }
     
     .hud {
@@ -95,17 +115,18 @@ interface Player {
     
     .menu-overlay {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: rgba(15, 23, 42, 0.9); padding: 3rem; border-radius: 16px;
+      background: rgba(15, 23, 42, 0.9); padding: 2.5rem; border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.1); text-align: center;
       display: flex; flex-direction: column; gap: 1.5rem; align-items: center;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); z-index: 10000;
+      width: 90%; max-width: 450px;
     }
     
-    .menu-overlay h2 { font-size: 3rem; margin: 0; color: white; }
-    .menu-overlay p { font-size: 1.2rem; color: #94a3b8; margin: 0; }
+    .menu-overlay h2 { font-size: 2.5rem; margin: 0; color: white; }
+    .menu-overlay p { font-size: 1.1rem; color: #94a3b8; margin: 0; }
     
-    .game-over-text { color: #ff4b4b; font-weight: bold; font-size: 3rem; text-transform: uppercase; text-shadow: 0 4px 8px rgba(0,0,0,0.5); }
-    .game-won-text { color: #fbbf24; font-weight: bold; font-size: 3rem; text-align: center; text-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+    .game-over-text { color: #ff4b4b; font-weight: bold; font-size: 2.5rem; text-transform: uppercase; text-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+    .game-won-text { color: #fbbf24; font-weight: bold; font-size: 2.5rem; text-align: center; text-shadow: 0 4px 8px rgba(0,0,0,0.5); }
     
     .menu-buttons { display: flex; gap: 1rem; margin-top: 1rem; }
     .btn-primary {
@@ -114,13 +135,53 @@ interface Player {
       transition: transform 0.2s, opacity 0.2s;
     }
     .btn-primary:hover { opacity: 0.9; transform: scale(1.05); }
-
+ 
     .btn-secondary {
       padding: 0.75rem 1.5rem; font-size: 1.1rem; border-radius: 8px; font-weight: 600;
       cursor: pointer; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white;
       transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem;
     }
     .btn-secondary:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+    /* Mobile Controls Styles */
+    .mobile-controls {
+      position: absolute; bottom: 1.5rem; left: 1rem; right: 1rem;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 10000; pointer-events: none;
+    }
+    .left-controls, .right-controls {
+      display: flex; gap: 1.5rem; pointer-events: auto;
+    }
+    .ctrl-btn {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: white; font-size: 1.5rem; font-weight: bold;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: all 0.1s ease;
+    }
+    .ctrl-btn.jump {
+      width: 80px; height: 80px;
+      font-size: 1rem;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+    .ctrl-btn:active {
+      transform: scale(0.9);
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #ef4444;
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+    }
+    .ctrl-btn.jump:active {
+      background: rgba(59, 130, 246, 0.25);
+      border-color: #3b82f6;
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.45);
+    }
   `]
 })
 export class BounceComponent implements AfterViewInit, OnDestroy {
@@ -134,12 +195,13 @@ export class BounceComponent implements AfterViewInit, OnDestroy {
   gameOver = signal(false);
   gameWon = signal(false);
   showFlash = signal(false);
+  isMobile = signal(false);
   
   private ctx!: CanvasRenderingContext2D;
   private gameLoopId: any;
   
   // Input state
-  private keys = { left: false, right: false, up: false };
+  keys = { left: false, right: false, up: false };
   
   // Physics config
   private gravity = 0.5;
@@ -156,6 +218,14 @@ export class BounceComponent implements AfterViewInit, OnDestroy {
 
   constructor() {
     this.generateLevels();
+    this.checkDevice();
+  }
+
+  @HostListener('window:resize')
+  checkDevice() {
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const isSmallScreen = window.innerWidth <= 768;
+    this.isMobile.set(isTouch || isSmallScreen);
   }
 
   ngAfterViewInit() {

@@ -81,31 +81,48 @@ interface Piece {
         <canvas #gameCanvas [width]="COLS * BLOCK_SIZE" [height]="ROWS * BLOCK_SIZE"></canvas>
       </div>
 
-      <div class="hud">
+      <div class="hud" *ngIf="isPlaying()">
         <div class="hud-stats">
           <div class="hud-box">
             <span>Score</span>
             <strong>{{ score() }}</strong>
           </div>
-          <div class="hud-box">
+          <div class="hud-box" *ngIf="!isMobile()">
             <span>Lines</span>
             <strong>{{ lines() }}</strong>
           </div>
-          <div class="hud-box">
+          <div class="hud-box" *ngIf="!isMobile()">
             <span>Level</span>
             <strong>{{ level() }}</strong>
           </div>
-          <div class="hud-box">
+          <div class="hud-box" *ngIf="!isMobile()">
             <span>Next</span>
             <canvas #nextCanvas width="120" height="120"></canvas>
           </div>
         </div>
         <button class="btn-exit" (click)="exitGame()">Exit Game</button>
       </div>
+
+      <!-- Mobile Touch Controls -->
+      <div class="mobile-controls" *ngIf="isMobile() && isPlaying()">
+        <div class="ctrl-left">
+          <button class="ctrl-btn left" (touchstart)="move(-1, 0); $event.preventDefault();">◀</button>
+          <button class="ctrl-btn right" (touchstart)="move(1, 0); $event.preventDefault();">▶</button>
+        </div>
+        <div class="ctrl-center">
+          <button class="ctrl-btn rotate" (touchstart)="rotate(); $event.preventDefault();">↻</button>
+        </div>
+        <div class="ctrl-right">
+          <button class="ctrl-btn soft-drop" (touchstart)="move(0, 1); $event.preventDefault();">▼</button>
+          <button class="ctrl-btn hard-drop" (touchstart)="hardDrop(); $event.preventDefault();">SPACE</button>
+        </div>
+      </div>
       
       <div class="menu-overlay" *ngIf="!isPlaying()">
         <h2>🧱 Block Puzzle</h2>
-        <p *ngIf="!gameOver()">Use arrow keys to move/rotate, Space to hard drop.</p>
+        <p *ngIf="!gameOver()">
+          {{ isMobile() ? 'Tap on-screen controls to move, rotate, and drop.' : 'Use arrow keys to move/rotate, Space to hard drop.' }}
+        </p>
         
         <div *ngIf="gameOver()" class="game-over-text">GAME OVER</div>
         <div *ngIf="gameOver()" class="final-score">Score: {{ score() }}</div>
@@ -123,17 +140,19 @@ interface Piece {
     .fullscreen-container {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: #0f172a; z-index: 9999; overflow: hidden;
-      display: flex; justify-content: center; align-items: center;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      gap: 1rem;
     }
     
     .game-area {
       display: flex; justify-content: center; align-items: center;
-      height: 100vh;
+      margin-top: 1rem;
     }
     
     .game-area canvas {
       background: #111827; box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5); 
-      display: block; max-height: 95vh; max-width: 95vw; object-fit: contain;
+      display: block; max-height: 48vh; max-width: 90vw; object-fit: contain;
+      border-radius: 12px;
     }
     
     .hud {
@@ -142,8 +161,21 @@ interface Piece {
       z-index: 10000; pointer-events: none;
     }
     .hud-stats {
-      display: flex; flex-direction: column; gap: 1rem;
+      display: flex; flex-direction: column; gap: 0.75rem;
     }
+    
+    @media (max-width: 768px) {
+      .hud-stats {
+        flex-direction: row; gap: 1rem;
+      }
+      .hud-box {
+        padding: 0.5rem 1rem !important;
+      }
+      .hud-box strong {
+        font-size: 1.3rem !important;
+      }
+    }
+
     .hud-box {
       background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px;
       display: flex; flex-direction: column; align-items: center;
@@ -163,17 +195,18 @@ interface Piece {
     
     .menu-overlay {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: rgba(15, 23, 42, 0.9); padding: 3rem; border-radius: 16px;
+      background: rgba(15, 23, 42, 0.9); padding: 2.5rem; border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.1); text-align: center;
       display: flex; flex-direction: column; gap: 1.5rem; align-items: center;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); z-index: 10000;
       pointer-events: auto;
+      width: 90%; max-width: 450px;
     }
     
-    .menu-overlay h2 { font-size: 3rem; margin: 0; color: white; }
-    .menu-overlay p { font-size: 1.2rem; color: #94a3b8; margin: 0; }
+    .menu-overlay h2 { font-size: 2.5rem; margin: 0; color: white; }
+    .menu-overlay p { font-size: 1.1rem; color: #94a3b8; margin: 0; }
     
-    .game-over-text { color: #ef4444; font-weight: bold; font-size: 3rem; text-shadow: 0 4px 8px rgba(0,0,0,0.8); letter-spacing: 4px; }
+    .game-over-text { color: #ef4444; font-weight: bold; font-size: 2.5rem; text-shadow: 0 4px 8px rgba(0,0,0,0.8); letter-spacing: 4px; }
     .final-score { color: #fbbf24; font-size: 1.5rem; font-weight: bold; }
     
     .menu-buttons { display: flex; gap: 1rem; margin-top: 1rem; }
@@ -183,13 +216,63 @@ interface Piece {
       transition: transform 0.2s, opacity 0.2s; text-transform: uppercase; letter-spacing: 1px;
     }
     .btn-primary:hover { opacity: 0.9; transform: scale(1.05); }
-
+ 
     .btn-secondary {
       padding: 0.75rem 1.5rem; font-size: 1.1rem; border-radius: 8px; font-weight: 600;
       cursor: pointer; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white;
       transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem;
     }
     .btn-secondary:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+    /* Mobile Controls Styles */
+    .mobile-controls {
+      display: flex; justify-content: space-between; align-items: center;
+      width: 95%; max-width: 480px; z-index: 10000; margin-top: 0.5rem;
+    }
+    .ctrl-left, .ctrl-center, .ctrl-right {
+      display: flex; gap: 0.75rem; align-items: center;
+    }
+    .ctrl-btn {
+      width: 50px; height: 50px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: white; font-size: 1.3rem; font-weight: bold;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 15px rgba(236, 72, 153, 0.1);
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: all 0.1s ease;
+    }
+    .ctrl-btn.rotate {
+      width: 65px; height: 65px;
+      font-size: 1.5rem;
+      box-shadow: 0 0 20px rgba(0, 245, 255, 0.15);
+      border-color: rgba(0, 245, 255, 0.2);
+    }
+    .ctrl-btn.hard-drop {
+      width: 80px; height: 50px; border-radius: 20px;
+      font-size: 0.9rem;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+    .ctrl-btn:active {
+      transform: scale(0.9);
+      background: rgba(236, 72, 153, 0.2);
+      border-color: #ec4899;
+      box-shadow: 0 0 25px rgba(236, 72, 153, 0.4);
+    }
+    .ctrl-btn.rotate:active {
+      background: rgba(6, 182, 212, 0.2);
+      border-color: #06b6d4;
+      box-shadow: 0 0 25px rgba(6, 182, 212, 0.4);
+    }
+    .ctrl-btn.hard-drop:active {
+      background: rgba(59, 130, 246, 0.25);
+      border-color: #3b82f6;
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+    }
   `]
 })
 export class TetrisComponent implements AfterViewInit, OnDestroy {
@@ -206,6 +289,7 @@ export class TetrisComponent implements AfterViewInit, OnDestroy {
   level = signal(1);
   isPlaying = signal(false);
   gameOver = signal(false);
+  isMobile = signal(false);
   
   private ctx!: CanvasRenderingContext2D;
   private nextCtx!: CanvasRenderingContext2D;
@@ -218,6 +302,17 @@ export class TetrisComponent implements AfterViewInit, OnDestroy {
   private lastTime = 0;
   private dropCounter = 0;
   private dropInterval = 1000;
+
+  constructor() {
+    this.checkDevice();
+  }
+
+  @HostListener('window:resize')
+  checkDevice() {
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const isSmallScreen = window.innerWidth <= 768;
+    this.isMobile.set(isTouch || isSmallScreen);
+  }
 
   ngAfterViewInit() {
     this.ctx = this.canvasRef.nativeElement.getContext('2d')!;
@@ -329,7 +424,7 @@ export class TetrisComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private move(dx: number, dy: number) {
+  move(dx: number, dy: number) {
     this.activePiece.x += dx;
     this.activePiece.y += dy;
     
@@ -343,7 +438,7 @@ export class TetrisComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private rotate() {
+  rotate() {
     const shape = this.activePiece.shape;
     const N = shape.length;
     // Transpose and reverse rows (rotate 90 deg clockwise)
@@ -370,7 +465,7 @@ export class TetrisComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private hardDrop() {
+  hardDrop() {
     while (!this.checkCollision()) {
       this.activePiece.y++;
     }

@@ -322,22 +322,48 @@ export class AngryBirdsComponent implements AfterViewInit, OnDestroy {
 
   // --- Input Handling ---
 
-  onMouseDown(e: MouseEvent) { this.handleStart(e.offsetX, e.offsetY); }
-  onMouseMove(e: MouseEvent) { this.handleMove(e.offsetX, e.offsetY); }
-  onMouseUp(e: MouseEvent) { this.handleEnd(); }
+  private getCanvasCoords(clientX: number, clientY: number): Vector {
+    const canvas = this.canvasRef.nativeElement;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  }
+
+  onMouseDown(e: MouseEvent) {
+    if (!this.isPlaying()) return;
+    const coords = this.getCanvasCoords(e.clientX, e.clientY);
+    this.handleStart(coords.x, coords.y);
+  }
+
+  onMouseMove(e: MouseEvent) {
+    if (!this.isPlaying()) return;
+    const coords = this.getCanvasCoords(e.clientX, e.clientY);
+    this.handleMove(coords.x, coords.y);
+  }
+
+  onMouseUp(e: MouseEvent) {
+    if (!this.isPlaying()) return;
+    this.handleEnd();
+  }
 
   onTouchStart(e: TouchEvent) {
     if (!this.isPlaying()) return;
     e.preventDefault();
-    const rect = this.canvasRef.nativeElement.getBoundingClientRect();
-    this.handleStart(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+    const coords = this.getCanvasCoords(e.touches[0].clientX, e.touches[0].clientY);
+    this.handleStart(coords.x, coords.y);
   }
+
   onTouchMove(e: TouchEvent) {
     if (!this.isPlaying()) return;
     e.preventDefault();
-    const rect = this.canvasRef.nativeElement.getBoundingClientRect();
-    this.handleMove(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+    const coords = this.getCanvasCoords(e.touches[0].clientX, e.touches[0].clientY);
+    this.handleMove(coords.x, coords.y);
   }
+
   onTouchEnd(e: TouchEvent) {
     if (!this.isPlaying()) return;
     e.preventDefault();

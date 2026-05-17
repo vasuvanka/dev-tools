@@ -38,7 +38,10 @@ interface Star {
   imports: [CommonModule],
   template: `
     <div class="fullscreen-container">
-      <canvas #gameCanvas [width]="width" [height]="height"></canvas>
+      <canvas #gameCanvas [width]="width" [height]="height"
+              (touchstart)="onTouchStart($event)"
+              (touchmove)="onTouchMove($event)"
+              (touchend)="onTouchEnd($event)"></canvas>
       
       <div class="hud" *ngIf="isPlaying()">
         <div class="hud-stats">
@@ -48,9 +51,14 @@ interface Star {
         <button class="btn-exit" (click)="exitGame()">Exit Game</button>
       </div>
 
+      <!-- Mobile Guide overlay -->
+      <div class="mobile-tip" *ngIf="isMobile() && isPlaying()">
+        Drag ship to move & auto-fire!
+      </div>
+
       <div class="menu-overlay" *ngIf="!isPlaying()">
         <h2>🚀 Space Blaster</h2>
-        <p>Arrow keys to move, SPACE to shoot!</p>
+        <p>{{ isMobile() ? 'Drag your finger anywhere to move and shoot!' : 'Arrow keys to move, SPACE to shoot!' }}</p>
         
         <div *ngIf="gameOver()" class="game-over-text">GAME OVER</div>
         <div *ngIf="gameOver()" class="final-score">Final Score: {{ score() }}</div>
@@ -93,16 +101,17 @@ interface Star {
     
     .menu-overlay {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: rgba(15, 23, 42, 0.9); padding: 3rem; border-radius: 16px;
+      background: rgba(15, 23, 42, 0.9); padding: 2.5rem; border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.1); text-align: center;
       display: flex; flex-direction: column; gap: 1.5rem; align-items: center;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); z-index: 10000;
+      width: 90%; max-width: 450px;
     }
     
-    .menu-overlay h2 { font-size: 3rem; margin: 0; color: white; }
-    .menu-overlay p { font-size: 1.2rem; color: #94a3b8; margin: 0; }
-    .game-over-text { color: #ef4444; font-weight: bold; font-size: 3rem; letter-spacing: 4px; margin-top: 1rem; }
-    .final-score { color: #fbbf24; font-size: 2rem; font-weight: bold; }
+    .menu-overlay h2 { font-size: 2.5rem; margin: 0; color: white; }
+    .menu-overlay p { font-size: 1.1rem; color: #94a3b8; margin: 0; }
+    .game-over-text { color: #ef4444; font-weight: bold; font-size: 2.5rem; letter-spacing: 4px; margin-top: 1rem; }
+    .final-score { color: #fbbf24; font-size: 1.8rem; font-weight: bold; }
     
     .menu-buttons { display: flex; gap: 1rem; margin-top: 1.5rem; }
     .btn-primary {
@@ -117,6 +126,25 @@ interface Star {
       transition: background 0.2s;
     }
     .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+
+    /* Mobile floating tip overlay */
+    .mobile-tip {
+      position: absolute; bottom: 2rem;
+      background: rgba(59, 130, 246, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      padding: 0.75rem 1.5rem; border-radius: 20px;
+      color: #93c5fd; font-weight: bold; font-size: 1rem;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+      pointer-events: none;
+      z-index: 10000;
+      animation: pulseSpace 2s infinite;
+    }
+    @keyframes pulseSpace {
+      0% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.03); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.8; }
+    }
   `]
 })
 export class SpaceBlasterComponent implements AfterViewInit, OnDestroy {
@@ -130,6 +158,7 @@ export class SpaceBlasterComponent implements AfterViewInit, OnDestroy {
   lives = signal(3);
   isPlaying = signal(false);
   gameOver = signal(false);
+  isMobile = signal(false);
   
   private ctx!: CanvasRenderingContext2D;
   private gameLoopId: any;
@@ -147,10 +176,21 @@ export class SpaceBlasterComponent implements AfterViewInit, OnDestroy {
   private lastEnemySpawn = 0;
   private difficultyMultiplier = 1;
 
+  constructor() {
+    this.checkDevice();
+  }
+
   @HostListener('window:resize')
   onResize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
+    this.checkDevice();
+  }
+
+  checkDevice() {
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const isSmallScreen = window.innerWidth <= 768;
+    this.isMobile.set(isTouch || isSmallScreen);
   }
 
   ngAfterViewInit() {
@@ -187,6 +227,43 @@ export class SpaceBlasterComponent implements AfterViewInit, OnDestroy {
       case 'ArrowDown': case 'KeyS': this.keys.down = false; break;
       case 'Space': this.keys.space = false; break;
     }
+  }
+
+  // Mobile Touch Listeners
+  onTouchStart(e: TouchEvent) {
+    if (!this.isPlaying()) return;
+    e.preventDefault();
+    this.keys.space = true; // Auto shoot on touch
+    this.handleTouchMove(e);
+  }
+
+  onTouchMove(e: TouchEvent) {
+    if (!this.isPlaying()) return;
+    e.preventDefault();
+    this.handleTouchMove(e);
+  }
+
+  onTouchEnd(e: TouchEvent) {
+    if (!this.isPlaying()) return;
+    e.preventDefault();
+    this.keys.space = false; // Stop shooting
+  }
+
+  private handleTouchMove(e: TouchEvent) {
+    if (!this.player) return;
+    const rect = this.canvasRef.nativeElement.getBoundingClientRect();
+    const touchX = e.touches[0].clientX - rect.left;
+    const touchY = e.touches[0].clientY - rect.top;
+    
+    // Position 45px above finger so visual ship remains visible
+    this.player.x = touchX;
+    this.player.y = touchY - 45;
+    
+    // Bounding box checks
+    if (this.player.x < this.player.w / 2) this.player.x = this.player.w / 2;
+    if (this.player.x > this.width - this.player.w / 2) this.player.x = this.width - this.player.w / 2;
+    if (this.player.y < this.player.h / 2) this.player.y = this.player.h / 2;
+    if (this.player.y > this.height - this.player.h / 2) this.player.y = this.height - this.player.h / 2;
   }
   
   exitGame() {
