@@ -8,7 +8,7 @@ import { SideMenuComponent } from './shared/side-menu/side-menu.component';
   imports: [RouterOutlet, ToolbarComponent, SideMenuComponent],
   template: `
     <app-toolbar></app-toolbar>
-    <div class="app-content">
+    <div class="app-content fade-in-up">
       <div class="app-layout">
         <app-side-menu></app-side-menu>
         <div class="main-content">
@@ -21,12 +21,13 @@ import { SideMenuComponent } from './shared/side-menu/side-menu.component';
     .app-content {
       margin-top: 80px;
       min-height: calc(100vh - 80px);
+      padding: 2rem 0;
     }
     
     .app-layout {
       display: flex;
       gap: 2rem;
-      padding: 2rem;
+      padding: 0 2rem;
       max-width: 1400px;
       margin: 0 auto;
     }
@@ -34,14 +35,16 @@ import { SideMenuComponent } from './shared/side-menu/side-menu.component';
     .main-content {
       flex: 1;
       min-width: 0;
+      position: relative;
     }
     
     @media (max-width: 1024px) {
       .app-layout {
         flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
+        gap: 1.5rem;
+        padding: 0 1rem;
       }
+      .app-content { padding: 1rem 0; }
     }
   `]
 })

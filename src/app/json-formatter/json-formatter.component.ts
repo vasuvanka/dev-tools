@@ -75,7 +75,7 @@ import { FormsModule } from '@angular/forms';
             </div>
           </div>
           <div class="output-stats" *ngIf="formattedJson()">
-            <span>Characters: {{ formattedJson()?.length || 0 }}</span>
+            <span>Characters: {{ formattedJson().length || 0 }}</span>
             <span>Lines: {{ getLineCount(formattedJson() || '') }}</span>
             <span class="status" [class.success]="isValidJson()" [class.error]="!isValidJson()">
               {{ getStatusMessage() }}

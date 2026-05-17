@@ -66,7 +66,7 @@ import { FormsModule } from '@angular/forms';
             class="text-output"
           ></textarea>
           <div class="output-stats" *ngIf="outputText()">
-            <span>Characters: {{ outputText()?.length || 0 }}</span>
+            <span>Characters: {{ outputText().length || 0 }}</span>
             <span>Bytes: {{ getByteLength(outputText() || '') }}</span>
             <span class="status" [class.success]="lastOperationSuccess()" [class.error]="!lastOperationSuccess()">
               {{ lastOperationMessage() }}

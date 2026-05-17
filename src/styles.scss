@@ -1,60 +1,96 @@
-/* iPhone Glass Theme - Global Styles */
+/* Midnight Aurora Theme - Global Styles */
 * {
   box-sizing: border-box;
 }
 
 :root {
-  --glass-bg: rgba(255, 255, 255, 0.08);
-  --glass-bg-light: rgba(255, 255, 255, 0.12);
-  --glass-bg-medium: rgba(255, 255, 255, 0.18);
-  --glass-bg-heavy: rgba(255, 255, 255, 0.25);
-  --glass-border: rgba(255, 255, 255, 0.15);
-  --glass-border-light: rgba(255, 255, 255, 0.25);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  --glass-shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+  /* Core Colors */
+  --bg-primary: #09090b; /* Deep black/zinc */
+  --bg-secondary: #18181b; 
+  --bg-tertiary: #27272a;
+  
+  /* Glass and Borders */
+  --glass-bg: rgba(24, 24, 27, 0.4);
+  --glass-bg-light: rgba(39, 39, 42, 0.6);
+  --glass-bg-medium: rgba(39, 39, 42, 0.8);
+  --glass-bg-heavy: rgba(39, 39, 42, 0.95);
+  
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-border-light: rgba(255, 255, 255, 0.1);
+  --glass-border-glow: rgba(255, 255, 255, 0.15);
+  
+  /* Shadows and Glows */
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --glass-shadow-light: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --glow-pink: 0 0 20px rgba(236, 72, 153, 0.15);
+  --glow-cyan: 0 0 20px rgba(34, 211, 238, 0.15);
+  --glow-purple: 0 0 20px rgba(168, 85, 247, 0.15);
+  
+  /* Blurs */
   --glass-blur: blur(20px);
   --glass-blur-light: blur(15px);
   --glass-blur-heavy: blur(10px);
   
-  --text-primary: #1a1a1a;
-  --text-secondary: #4a4a4a;
-  --text-light: rgba(26, 26, 26, 0.6);
+  /* Typography */
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --text-light: #71717a;
   
-  /* Modern accent colors - Pink theme */
-  --accent-purple: #ec4899;
+  /* Accents (Neon/Vibrant) */
+  --accent-purple: #c084fc;
   --accent-pink: #f472b6;
   --accent-blue: #60a5fa;
   --accent-green: #34d399;
-  --accent-orange: #fb7185;
-  --accent-red: #f87171;
+  --accent-orange: #fb923c;
   --accent-cyan: #22d3ee;
-  --accent-indigo: #a78bfa;
   
-  --gradient-primary: linear-gradient(135deg, #ffffff 0%, #fce7f3 100%);
-  --gradient-secondary: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
-  --gradient-success: linear-gradient(135deg, #ecfdf5 0%, #039b4d 100%);
-  --gradient-warning: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  --gradient-danger: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
-  --gradient-info: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-  --gradient-purple: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
-  --gradient-sunset: linear-gradient(135deg, #fff1f2 0%, #fce7f3 100%);
-  --gradient-ocean: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  --gradient-forest: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  --gradient-fire: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
-  --gradient-ice: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  /* Gradients */
+  --gradient-aurora: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(34, 211, 238, 0.1) 100%);
+  --gradient-purple: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  --gradient-cyan: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+}
+
+/* Light mode overrides (Daylight Glass) - Opt-in */
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-tertiary: #e2e8f0;
+  
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-bg-light: rgba(255, 255, 255, 0.8);
+  --glass-bg-medium: rgba(255, 255, 255, 0.9);
+  --glass-bg-heavy: rgba(255, 255, 255, 0.95);
+  
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --glass-border-light: rgba(0, 0, 0, 0.1);
+  --glass-border-glow: rgba(0, 0, 0, 0.15);
+  
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  --glass-shadow-light: 0 4px 20px rgba(0, 0, 0, 0.03);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-light: #94a3b8;
+  
+  --gradient-aurora: linear-gradient(135deg, rgba(236, 72, 153, 0.05) 0%, rgba(34, 211, 238, 0.05) 100%);
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  background: var(--gradient-primary);
-  min-height: 100vh;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background-color: var(--bg-primary);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(236, 72, 153, 0.05), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(34, 211, 238, 0.05), transparent 25%);
+  background-attachment: fixed;
   color: var(--text-primary);
+  min-height: 100vh;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Glass morphism utility classes */
+/* Base Glassmorphism utility classes */
 .glass {
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
@@ -89,21 +125,21 @@ body {
 
 /* Glass input styles */
 .glass-input {
-  background: var(--glass-bg-medium);
-  backdrop-filter: var(--glass-blur-heavy);
-  -webkit-backdrop-filter: var(--glass-blur-heavy);
-  border: 2px solid var(--glass-border-light);
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--glass-border-light);
   border-radius: 8px;
   color: var(--text-primary);
   padding: 0.75rem 1rem;
   font-size: 1rem;
+  font-family: inherit;
   outline: none;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-input:focus {
-  border-color: var(--accent-pink);
-  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.2);
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .glass-input::placeholder {
@@ -112,26 +148,42 @@ body {
 
 /* Glass button styles */
 .glass-button {
-  background: var(--glass-bg-medium);
-  backdrop-filter: var(--glass-blur-heavy);
-  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  background: var(--glass-bg-light);
   border: 1px solid var(--glass-border-light);
   border-radius: 8px;
   color: var(--text-primary);
   font-weight: 600;
+  font-family: inherit;
   padding: 0.75rem 1.5rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-button::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
 .glass-button:hover {
-  background: var(--glass-bg-heavy);
+  background: var(--glass-bg-medium);
+  border-color: var(--glass-border-glow);
   transform: translateY(-2px);
-  box-shadow: var(--glass-shadow-light);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+.glass-button:hover::after {
+  opacity: 1;
 }
 
 .glass-button:active {
@@ -146,168 +198,114 @@ body {
 
 /* Glass card styles */
 .glass-card {
-  background: var(--glass-bg-light);
+  background: var(--glass-bg);
   backdrop-filter: var(--glass-blur-light);
   -webkit-backdrop-filter: var(--glass-blur-light);
   border: 1px solid var(--glass-border-light);
-  border-radius: 16px;
+  border-radius: 20px;
   box-shadow: var(--glass-shadow);
   padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: var(--glass-border-glow);
+  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.8);
 }
 
 /* Glass section styles */
 .glass-section {
   background: var(--glass-bg-light);
-  backdrop-filter: var(--glass-blur-light);
-  -webkit-backdrop-filter: var(--glass-blur-light);
   border: 1px solid var(--glass-border-light);
-  border-radius: 12px;
-  box-shadow: var(--glass-shadow-light);
+  border-radius: 16px;
   padding: 1.5rem;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .glass-card {
-    padding: 1rem;
-    border-radius: 12px;
-  }
-  
-  .glass-section {
-    padding: 1rem;
-    border-radius: 8px;
-  }
+  box-shadow: var(--glass-shadow-light);
 }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.2);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.2);
 }
 
-/* Animation utilities */
-@keyframes glassShimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.glass-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  background-size: 200% 100%;
-  animation: glassShimmer 2s infinite;
+.fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Focus styles for accessibility */
-.glass-input:focus,
-.glass-button:focus {
-  outline: 2px solid var(--accent-pink);
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.3);
+  color: white;
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid var(--accent-cyan);
   outline-offset: 2px;
 }
 
-/* Selection styles */
-::selection {
-  background: rgba(236, 72, 153, 0.3);
-  color: var(--text-primary);
-}
-
-/* Modern gradient utility classes */
-.gradient-purple {
-  background: var(--gradient-purple);
-}
-
-.gradient-sunset {
-  background: var(--gradient-sunset);
-}
-
-.gradient-ocean {
-  background: var(--gradient-ocean);
-}
-
-.gradient-forest {
-  background: var(--gradient-forest);
-}
-
-.gradient-fire {
-  background: var(--gradient-fire);
-}
-
-.gradient-ice {
-  background: var(--gradient-ice);
-}
-
 /* Modern accent color utilities */
-.text-purple {
-  color: var(--accent-purple);
-}
+.text-purple { color: var(--accent-purple); }
+.text-pink { color: var(--accent-pink); }
+.text-blue { color: var(--accent-blue); }
+.text-green { color: var(--accent-green); }
+.text-orange { color: var(--accent-orange); }
+.text-cyan { color: var(--accent-cyan); }
 
-.text-pink {
-  color: var(--accent-pink);
+/* Glass button variants */
+.glass-button-primary {
+  background: var(--gradient-cyan);
+  border: none;
+  color: white;
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
 }
-
-.text-blue {
-  color: var(--accent-blue);
-}
-
-.text-green {
-  color: var(--accent-green);
-}
-
-.text-orange {
-  color: var(--accent-orange);
-}
-
-.text-red {
-  color: var(--accent-red);
-}
-
-.text-cyan {
-  color: var(--accent-cyan);
-}
-
-.text-indigo {
-  color: var(--accent-indigo);
-}
-
-/* Modern glass button variants - Pink theme */
-.glass-button-purple {
-  background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(236, 72, 153, 0.1));
-  border-color: rgba(236, 72, 153, 0.3);
-  color: var(--accent-purple);
+.glass-button-primary:hover {
+  background: var(--gradient-cyan);
+  box-shadow: 0 8px 25px rgba(6, 182, 212, 0.6);
 }
 
 .glass-button-pink {
-  background: linear-gradient(135deg, rgba(244, 114, 182, 0.2), rgba(244, 114, 182, 0.1));
-  border-color: rgba(244, 114, 182, 0.3);
+  background: rgba(236, 72, 153, 0.1);
+  border-color: rgba(236, 72, 153, 0.2);
   color: var(--accent-pink);
+}
+.glass-button-pink:hover {
+  background: rgba(236, 72, 153, 0.2);
+  border-color: rgba(236, 72, 153, 0.4);
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.2);
 }
 
 .glass-button-blue {
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(96, 165, 250, 0.1));
-  border-color: rgba(96, 165, 250, 0.3);
+  background: rgba(96, 165, 250, 0.1);
+  border-color: rgba(96, 165, 250, 0.2);
   color: var(--accent-blue);
 }
-
-.glass-button-green {
-  background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(52, 211, 153, 0.1));
-  border-color: rgba(52, 211, 153, 0.3);
-  color: var(--accent-green);
-}
-
-.glass-button-orange {
-  background: linear-gradient(135deg, rgba(251, 113, 133, 0.2), rgba(251, 113, 133, 0.1));
-  border-color: rgba(251, 113, 133, 0.3);
-  color: var(--accent-orange);
+.glass-button-blue:hover {
+  background: rgba(96, 165, 250, 0.2);
+  border-color: rgba(96, 165, 250, 0.4);
+  box-shadow: 0 0 15px rgba(96, 165, 250, 0.2);
 }

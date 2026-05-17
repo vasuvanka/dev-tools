@@ -9,63 +9,77 @@ import { filter } from 'rxjs/operators';
   imports: [CommonModule, RouterModule],
   template: `
     <div class="side-menu glass-card">
-      <div class="menu-header">
-        <h2>🛠️ Dev Tools</h2>
-      </div>
-      
       <nav class="menu-nav">
         <button 
-          class="menu-item glass-medium" 
+          class="menu-item" 
           [class.active]="activeSection() === 'tools'"
           (click)="setActiveSection('tools')">
           <span class="menu-icon">🔧</span>
           <span class="menu-text">Tools</span>
+          <div class="active-indicator"></div>
         </button>
         
         <button 
-          class="menu-item glass-medium" 
-          [class.active]="activeSection() === 'news'"
-          (click)="setActiveSection('news')">
-          <span class="menu-icon">📰</span>
-          <span class="menu-text">News</span>
-        </button>
-        
-        <button 
-          class="menu-item glass-medium" 
-          [class.active]="activeSection() === 'resources'"
-          (click)="setActiveSection('resources')">
-          <span class="menu-icon">📚</span>
-          <span class="menu-text">Resources</span>
+          class="menu-item" 
+          [class.active]="activeSection() === 'games'"
+          (click)="setActiveSection('games')">
+          <span class="menu-icon">🎮</span>
+          <span class="menu-text">Games</span>
+          <div class="active-indicator"></div>
         </button>
       </nav>
       
       <!-- Quick Tool Links -->
       <div class="quick-tools" *ngIf="showQuickTools()">
-        <h3>Quick Tools</h3>
+        <h3>Quick Access</h3>
         <div class="quick-tools-grid">
-          <a routerLink="/todo" class="quick-tool glass-light">
+          <a routerLink="/todo" class="quick-tool" routerLinkActive="active">
             <span class="quick-tool-icon">📝</span>
             <span class="quick-tool-text">Todo</span>
           </a>
-          <a routerLink="/ip-address" class="quick-tool glass-light">
+          <a routerLink="/ip-address" class="quick-tool" routerLinkActive="active">
             <span class="quick-tool-icon">🌐</span>
             <span class="quick-tool-text">IP</span>
           </a>
-          <a routerLink="/url-shortener" class="quick-tool glass-light">
+          <a routerLink="/url-shortener" class="quick-tool" routerLinkActive="active">
             <span class="quick-tool-icon">🔗</span>
             <span class="quick-tool-text">URL</span>
           </a>
-          <a routerLink="/timer" class="quick-tool glass-light">
+          <a routerLink="/timer" class="quick-tool" routerLinkActive="active">
             <span class="quick-tool-icon">⏰</span>
             <span class="quick-tool-text">Timer</span>
           </a>
-          <a routerLink="/base64" class="quick-tool glass-light">
+          <a routerLink="/base64" class="quick-tool" routerLinkActive="active">
             <span class="quick-tool-icon">🔐</span>
             <span class="quick-tool-text">Base64</span>
           </a>
-          <a routerLink="/json-formatter" class="quick-tool glass-light">
+          <a routerLink="/json-formatter" class="quick-tool" routerLinkActive="active">
             <span class="quick-tool-icon">📄</span>
             <span class="quick-tool-text">JSON</span>
+          </a>
+          <a routerLink="/jwt-debugger" class="quick-tool" routerLinkActive="active">
+            <span class="quick-tool-icon">🔑</span>
+            <span class="quick-tool-text">JWT</span>
+          </a>
+          <a routerLink="/hash-generator" class="quick-tool" routerLinkActive="active">
+            <span class="quick-tool-icon">🧬</span>
+            <span class="quick-tool-text">Hash</span>
+          </a>
+          <a routerLink="/uuid-generator" class="quick-tool" routerLinkActive="active">
+            <span class="quick-tool-icon">🆔</span>
+            <span class="quick-tool-text">UUID</span>
+          </a>
+          <a routerLink="/photo-editor" class="quick-tool" routerLinkActive="active">
+            <span class="quick-tool-icon">🖼️</span>
+            <span class="quick-tool-text">Photo</span>
+          </a>
+          <a routerLink="/audio-converter" class="quick-tool" routerLinkActive="active">
+            <span class="quick-tool-icon">🎵</span>
+            <span class="quick-tool-text">Audio</span>
+          </a>
+          <a routerLink="/pdf-tools" class="quick-tool" routerLinkActive="active">
+            <span class="quick-tool-icon">📑</span>
+            <span class="quick-tool-text">PDF</span>
           </a>
         </div>
       </div>
@@ -75,63 +89,70 @@ import { filter } from 'rxjs/operators';
     .side-menu {
       width: 280px;
       height: fit-content;
-      padding: 2rem;
+      padding: 1.5rem;
       position: sticky;
       top: 100px;
-    }
-    
-    .menu-header {
-      text-align: center;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--glass-border-light);
-    }
-    
-    .menu-header h2 {
-      margin: 0;
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--text-primary);
+      border: 1px solid var(--glass-border-light);
     }
     
     .menu-nav {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.75rem;
       margin-bottom: 2rem;
     }
     
     .menu-item {
+      position: relative;
       display: flex;
       align-items: center;
       gap: 1rem;
       padding: 1rem 1.5rem;
-      border: none;
+      border: 1px solid transparent;
       border-radius: 12px;
-      background: var(--glass-bg-medium);
-      backdrop-filter: var(--glass-blur-heavy);
-      -webkit-backdrop-filter: var(--glass-blur-heavy);
-      color: var(--text-primary);
-      font-size: 1rem;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       text-align: left;
+      overflow: hidden;
+      font-family: inherit;
     }
     
     .menu-item:hover {
-      background: var(--glass-bg-heavy);
-      transform: translateX(4px);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
     }
     
     .menu-item.active {
-      background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(236, 72, 153, 0.1));
-      border: 1px solid rgba(236, 72, 153, 0.3);
-      color: var(--accent-pink);
+      background: linear-gradient(90deg, rgba(34, 211, 238, 0.1) 0%, transparent 100%);
+      color: var(--accent-cyan);
+      border-color: rgba(34, 211, 238, 0.2);
+    }
+    
+    .active-indicator {
+      position: absolute;
+      left: 0; top: 0; bottom: 0; width: 3px;
+      background: var(--accent-cyan);
+      opacity: 0;
+      transition: opacity 0.3s;
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+    
+    .menu-item.active .active-indicator {
+      opacity: 1;
     }
     
     .menu-icon {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
+      filter: grayscale(1);
+      transition: filter 0.3s;
+    }
+    
+    .menu-item:hover .menu-icon, .menu-item.active .menu-icon {
+      filter: grayscale(0);
     }
     
     .menu-text {
@@ -139,15 +160,17 @@ import { filter } from 'rxjs/operators';
     }
     
     .quick-tools {
-      padding-top: 1rem;
+      padding-top: 1.5rem;
       border-top: 1px solid var(--glass-border-light);
     }
     
     .quick-tools h3 {
-      margin: 0 0 1rem 0;
-      font-size: 1rem;
+      margin: 0 0 1rem 0.5rem;
+      font-size: 0.9rem;
       font-weight: 600;
-      color: var(--text-primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
     }
     
     .quick-tools-grid {
@@ -160,22 +183,37 @@ import { filter } from 'rxjs/operators';
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.5rem;
       padding: 0.75rem 0.5rem;
       text-decoration: none;
-      color: inherit;
-      border-radius: 8px;
+      color: var(--text-secondary);
+      border-radius: 12px;
       transition: all 0.3s ease;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid transparent;
     }
     
     .quick-tool:hover {
-      background: var(--glass-bg-heavy);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
       transform: translateY(-2px);
     }
     
+    .quick-tool.active {
+      background: rgba(236, 72, 153, 0.1);
+      color: var(--accent-pink);
+      border-color: rgba(236, 72, 153, 0.2);
+    }
+    
     .quick-tool-icon {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
+      filter: grayscale(1);
+      transition: filter 0.3s;
+    }
+    
+    .quick-tool:hover .quick-tool-icon, .quick-tool.active .quick-tool-icon {
+      filter: grayscale(0);
     }
     
     .quick-tool-text {
@@ -188,17 +226,25 @@ import { filter } from 'rxjs/operators';
         position: static;
         padding: 1rem;
         margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
       }
       
       .menu-nav {
         flex-direction: row;
         overflow-x: auto;
         gap: 1rem;
+        margin-bottom: 0;
       }
       
       .menu-item {
         white-space: nowrap;
-        min-width: 120px;
+        min-width: 140px;
+        justify-content: center;
+      }
+      
+      .active-indicator {
+        left: 0; right: 0; bottom: 0; top: auto; height: 3px; width: auto;
       }
       
       .quick-tools {
@@ -208,9 +254,9 @@ import { filter } from 'rxjs/operators';
   `]
 })
 export class SideMenuComponent {
-  activeSection = signal<'tools' | 'news' | 'resources'>('tools');
+  activeSection = signal<'tools' | 'news' | 'resources' | 'games'>('tools');
   currentPath = signal<string>('/dashboard');
-  
+
   constructor(private router: Router) {
     // Listen to route changes
     this.router.events
@@ -219,36 +265,41 @@ export class SideMenuComponent {
         this.currentPath.set(event.url);
         this.updateActiveSection();
       });
-    
+
     // Initialize on component load
     this.updateActiveSection();
   }
-  
+
   private updateActiveSection() {
     const path = this.currentPath();
     if (path === '/') {
       this.activeSection.set('tools');
+    } else if (path.startsWith('/games')) {
+      this.activeSection.set('games');
     } else {
       // For individual tool pages, keep tools section active
       this.activeSection.set('tools');
     }
   }
-  
-  setActiveSection(section: 'tools' | 'news' | 'resources') {
+
+  setActiveSection(section: 'tools' | 'news' | 'resources' | 'games') {
     this.activeSection.set(section);
 
-    switch(section){
+    switch (section) {
       case 'tools':
         this.router.navigate(['/']);
         break;
-        case 'news':
-          this.router.navigate(['/news']);
-          break;
-        default:
-          this.router.navigate(['/resources'])
+      case 'news':
+        this.router.navigate(['/news']);
+        break;
+      case 'games':
+        this.router.navigate(['/games']);
+        break;
+      default:
+        this.router.navigate(['/resources'])
     }
   }
-  
+
   showQuickTools(): boolean {
     const path = this.currentPath();
     return path !== '/';

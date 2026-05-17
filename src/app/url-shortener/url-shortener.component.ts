@@ -63,7 +63,7 @@ interface ShortUrl {
           </div>
           <div class="stat">
             <span class="stat-label">Shortened Length:</span>
-            <span class="stat-value">{{ shortenedUrl()?.length || 0 }} characters</span>
+            <span class="stat-value">{{ shortenedUrl().length || 0 }} characters</span>
           </div>
           <div class="stat">
             <span class="stat-label">Saved:</span>
